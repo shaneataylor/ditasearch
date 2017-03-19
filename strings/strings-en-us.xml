@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings xml:lang="en-us">
+    <str name="ditasearch.searchdiv_aria_label">search</str>
+    <str name="ditasearch.input_aria_label">search terms</str>
+    <str name="ditasearch.input_placeholder">Search</str>
+    <str name="ditasearch.results_aria_label">search results</str>
+    <str name="ditasearch.results_no_results">No topics found</str>
+</strings>

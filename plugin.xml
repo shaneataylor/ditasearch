@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.taylortext.ditasearch">
+    <feature extension="package.support.name" value="Shane Taylor"/>
+    <feature extension="package.support.email" value="shane@taylortext.com"/>
+    <feature extension="package.version" value="1.0"/>
+
+    <require plugin="org.dita.html5"/>
+    
+    <template file="build_ditasearch_template.xml"/>
+    <feature extension="dita.conductor.target.relative" value="conductor.xml" type="file"/>
+    <feature extension="depend.preprocess.post" value="ditasearch"/>
+    <extension-point id="com.taylortext.ditasearch.pre" name="Pre-indexing target"/>
+    <extension-point id="com.taylortext.ditasearch.post" name="Post-indexing target"/>
+    
+    <feature extension="dita.xsl.messages" file="messages.xml"/>
+    <feature extension="dita.xsl.strings" file="strings/strings.xml"/>
+    <transtype name="html5">
+        <param name="args.ditasearch.configs" 
+            desc="Specifies an optional search configuration file containing stopwords, stemming exceptions, and synonyms.
+            This file can be merged with or replace the default configuration." type="file"/>
+        <param name="args.ditasearch.nohtml" type="enum" 
+            desc="Omit adding the search HTML to topics if you are including it yourself, for example, in a frameset
+            or custom header and footer.">
+            <val desc="Don't add the search HTML to topics.">true</val>
+            <val default="true" desc="The build adds &lt;div class='ditasearch'&gt; to the header 
+                and &lt;script src='{path}/ditasearch.js'&gt; to the footer.">false</val>
+        </param>
+    </transtype>
+    <feature extension="dita.conductor.html5.param" file="params.xml"/>
+    <feature extension="dita.conductor.html5.toc.param" file="params.xml"/>
+    <feature extension="dita.xsl.html5" file="xsl/header-footer.xsl"/>
+    <feature extension="dita.xsl.html5.toc" file="xsl/header-footer.xsl"/>
+    <feature extension="dita.xsl.html5.cover" file="xsl/header-footer.xsl"/>
+</plugin>
+    

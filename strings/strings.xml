@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<langlist>
+    <lang xml:lang="en" filename="strings-en-us.xml"/>
+    <lang xml:lang="en-us" filename="strings-en-us.xml"/>
+</langlist>

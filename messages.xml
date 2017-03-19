@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<messages>
+    <message id="DS01" type="WARN">
+        <reason>Can't resolve target topic title for short description.</reason>
+        <response>The short description for the indexed topic %1 will not contain the text of the &lt;xref&gt; or &lt;keyword&gt; that references %2.</response>
+    </message>
+    <message id="DS02" type="INFO"><!-- WAS GIDX095I -->
+        <reason>Excluding topic from search.</reason>
+        <response>A reference to topic %1 specified @search="no".</response>
+    </message>
+    <message id="DS03" type="INFO">
+        <reason>Combining user search config file %1 with default search configuration.</reason>
+        <response/>
+    </message>
+    <message id="DS04" type="INFO">
+        <reason>Using only user search config file %1.</reason>
+        <response/>
+    </message>
+    <message id="DS05" type="INFO">
+        <reason>Using only default search configuration file.</reason>
+        <response/>
+    </message>
+</messages>    

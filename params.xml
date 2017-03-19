@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dummy>
+    <param name="args.ditasearch.configs" expression="${args.ditasearch.configs}"/>
+    <param name="args.ditasearch.nohtml" expression="${args.ditasearch.nohtml}"/>
+</dummy>

@@ -1,0 +1,34 @@
+<project name="stemmer_test" default="build_test" basedir=".">
+    <description>Build stemmer test source for comparison with expected output</description>
+    <!--<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="deps/ant-contrib/ant-contrib/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>-->
+    
+    <!--<property name="source.dir" location="dita_source_files"/>-->
+    
+    <property environment="env"/>
+    <property name="dita.dir" value="${env.DITA_DIR}"/><!-- Set from environment -->
+    
+    <property name="dita.ext" value=".xml" />
+    <property name="args.outext" value=".html" />
+    
+    <property name="args.input.dir" location="dita_source" />
+    <property name="args.input" value="stemmer_test_source.ditamap"/>
+    
+    <property name="dita.temp.dir" location="temp" />
+    <property name="clean.temp" value="no"/>
+    <property name="args.logdir" location="logs"/>
+    
+    <property name="output.dir" location="out"/>
+    
+    <import file="${dita.dir}/build.xml" />
+    
+
+    <target name="build_test">
+        <delete dir="${dita.temp.dir}"/>
+        <antcall target="init"></antcall>
+    </target>
+    
+</project>

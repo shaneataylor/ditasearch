@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="searchconfig">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="stopwords"/>
+                <xs:element ref="exceptionalforms"/>
+                <xs:element ref="synonyms"/>
+            </xs:sequence>
+            <xs:attribute ref="useDefaultConfigs" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="stopwords">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="stopword" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="stopword" type="word"/>
+    
+    <xs:element name="exceptionalforms">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="exception" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueexceptions">
+            <xs:selector xpath="./exception"/>
+            <xs:field xpath="@word"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:element name="exception">
+        <xs:complexType>
+            <xs:attribute name="stem" use="required" type="word"/>
+            <xs:attribute name="word" use="required" type="word"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="synonyms">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="synonym" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniquesynonyms">
+            <xs:selector xpath="./synonym"/>
+            <xs:field xpath="@term"/>
+        </xs:unique>
+    </xs:element>
+    <xs:element name="synonym">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="variant" minOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute name="term" use="required" type="words"/>
+        </xs:complexType>
+        <xs:unique name="uniquevariants">
+            <xs:selector xpath="./variant"/>
+            <xs:field xpath="."/>
+        </xs:unique>
+    </xs:element>
+    <xs:element name="variant" type="word"/>
+
+    <xs:simpleType name="word">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z']+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="words">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z' -]+"/>
+            <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:attribute name="useDefaultConfigs" default="addToDefault">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="addToDefault"/>
+                <xs:enumeration value="replaceDefault"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+</xs:schema>
