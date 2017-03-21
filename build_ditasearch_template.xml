@@ -3,8 +3,9 @@
 <project name="build_ditasearch_targets" basedir="."
     xmlns:dita="http://dita-ot.sourceforge.net">
     
-    <target name="ditasearch" 
+    <target name="ditasearch"
         dita:depends="
+        ditasearch-init,
         {com.taylortext.ditasearch.pre}, 
         ditasearch-searchindex,
         {com.taylortext.ditasearch.post}
@@ -12,6 +13,21 @@
         dita:extension="depends org.dita.dost.platform.InsertDependsAction">
         <dita:extension id="com.taylortext.ditasearch.pre" behavior="org.dita.dost.platform.InsertAction"/>
         <dita:extension id="com.taylortext.ditasearch.post" behavior="org.dita.dost.platform.InsertAction"/>
+    </target>
+    
+    <target name="ditasearch-init">
+        <condition property="ditasearch-gen-index">
+            <!-- proxy test for an HTML-type transformation -->
+            <or>
+                <equals arg1="${transtype}" arg2="html5"/>
+                <isset property="args.css"/>
+                <isset property="args.ftr"/>
+                <isset property="args.hdf"/>
+                <isset property="args.hdr"/>
+                <isset property="args.html5.toc"/>
+                <isset property="args.outext"/>
+            </or>
+        </condition>
     </target>
     
     <target name="ditasearch-genlist">
@@ -39,8 +55,9 @@
         <loadfile property="nosearchlist" srcfile="${dita.temp.dir}/nosearch.list"/>
     </target>
     
-    <target name="ditasearch-searchindex" description="Generate a JSON index of the help content."
-        depends="ditasearch-genlist, ditasearch-configfile">
+    <target name="ditasearch-searchindex" if="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
+        <antcall target="ditasearch-genlist"/>
+        <antcall target="ditasearch-configfile"/>
         <!-- Index each topic individually first -->
         <xslt basedir="${dita.temp.dir}"
             includesfile="${dita.temp.dir}/fullditatopic.list"
