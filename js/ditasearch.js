@@ -198,9 +198,6 @@ var ditasearch = {
         "pending"   : function() {
                     ditasearch.div.results.className = "dspending";
         },
-        "done"      : function() {
-                    ditasearch.div.results.className = "";
-        },
         "toHTML"    : function (results) {
                     /* results data structure :
                               "title"     : string,
@@ -225,8 +222,9 @@ var ditasearch = {
                                         + alink + shortdesc + '</li>';
                     }
                     resultsHTML += "</ol>";
-                    ditasearch.results.done();
                     ditasearch.div.results.innerHTML = resultsHTML;
+                    ditasearch.div.results.scrollTop = 0;
+                    ditasearch.results.show();
         },
         "show"      : function() {
                     ditasearch.div.results.className = "";
