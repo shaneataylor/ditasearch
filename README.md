@@ -18,7 +18,7 @@ a help index and search box in your HTML5 output. Unique features include:
 Install the plugin like any other DITA-OT plugin:
 
 ```
-dita -install https://github.com/shaneataylor/ditasearch/archive/R1.zip
+dita -install https://github.com/shaneataylor/ditasearch/archive/1.1.zip
 ```
 
 ## Use
@@ -53,3 +53,14 @@ or custom header and footer. The following values are supported:
 * `true` – Don't add the search HTML to topics.
 * `false` (default) – The build adds `<div class='ditasearch'>` to the header 
   and `<script src='{path}/ditasearch.js'>` to the footer.
+
+## Release history
+
+### 1.1 - Bugfix release
+
+- Fixed: The search index was built even for non-HTML builds.
+- Fixed: Search results did not scroll to the top after the query changed.
+
+### R1 - Initial release
+
+
