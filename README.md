@@ -56,6 +56,14 @@ or custom header and footer. The following values are supported:
 
 ## Release history
 
+### 1.2 - Update for DITA-OT 3.1
+
+- TO DO
+  - paths are platform-independent for Windows support
+  - pass query to search result link (use "q" parameter for GA)
+- DONE
+  - XSL stylesheets all specify version="2.0" not 1.0
+
 ### 1.1 - Bugfix release
 
 - Fixed: The search index was built even for non-HTML builds.
