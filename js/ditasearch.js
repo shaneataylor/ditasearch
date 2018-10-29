@@ -31,6 +31,13 @@ var ditasearch = {
                         ditasearch.div.input = ditasearch.div.querySelector("input");
                         ditasearch.div.results = ditasearch.div.querySelector("nav");
                         
+                        var saved = ditasearch.load();
+                        if (saved != null) {
+                            ditasearch.div.input.value = saved.query;
+                            ditasearch.results.toHTML(saved.results);
+                            ditasearch.results.hide();
+                        }
+                        
                         // Event handlers
                         ditasearch.div.addEventListener("click", ditasearch.results.show);
                         ditasearch.div.addEventListener("blur", ditasearch.cancel);
@@ -90,7 +97,8 @@ var ditasearch = {
     query       : {
         value   : "",
         get     : function() {
-                    return ditasearch.div.input.value;
+                    ditasearch.query.value = ditasearch.div.input.value;
+                    return ditasearch.query.prestem(ditasearch.query.value);
         },
         prestem : function( words ) {
                     words = words.toLowerCase();
@@ -122,7 +130,7 @@ var ditasearch = {
                     }
     },
     "search"    : function(){
-                      var query = ditasearch.query.prestem( ditasearch.query.get() );
+                      var query = ditasearch.query.get();
                       var terms = query.split(" ");
                       ditasearchStems = [];
                       for (var i = 0; i < terms.length; i++) { // stem each search term
@@ -163,13 +171,23 @@ var ditasearch = {
                       }
                       if ( query == "") {
                           ditasearch.results.clear();
+                          sessionStorage.removeItem("ditasearch");
+
                       } else if ( results.length == 0 ) {
                           results.push({ "title" : ditasearch.strings.results_no_results });
+                          ditasearch.save({"query":ditasearch.query.value, "results":results});
                           ditasearch.results.toHTML(results);
                       } else {
                           results.sort(function(a,b) {return b.score - a.score});
+                          ditasearch.save({"query":ditasearch.query.value, "results":results});
                           ditasearch.results.toHTML(results);
                       }
+    },
+    save            : function(object) {
+                        sessionStorage.setItem("ditasearch",JSON.stringify(object));
+    },
+    load            : function() {
+                        return JSON.parse(sessionStorage.getItem("ditasearch"));
     },
     "getSynonyms"   : function(stemlist){
                         var synonyms = [];
@@ -206,13 +224,14 @@ var ditasearch = {
                               "terms"     : string,
                               "score"     : number  */
                     var alinkbase = '<a href="' + ditasearch.div.getAttribute("data-searchroot");
+                    var queryparam = '?query=' + encodeURIComponent(ditasearch.query.value);
                     var resultsHTML = "<ol>";
                     for (var i = 0; i < results.length; i++) {
                         var scoreattr = stemsattr = '';
                         if (typeof results[i].score == "number")  { scoreattr = ' data-score="' + results[i].score + '"'; }
                         if (typeof results[i].terms == "string")  { stemsattr = ' data-stems="' + results[i].terms + '"'; }
                         var alink = (typeof results[i].href == "string" && results[i].href.length > 0) 
-                            ? alinkbase + results[i].href + '">' + results[i].title + '</a>'
+                            ? alinkbase + results[i].href + queryparam + '">' + results[i].title + '</a>'
                             : '<p>' + results[i].title + '</p>';
                         var shortdesc = (typeof results[i].shortdesc == "string" && results[i].shortdesc.length > 0)
                                     ? '<p class="shortdesc">' + results[i].shortdesc + '</p>'
