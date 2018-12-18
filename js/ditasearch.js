@@ -5,14 +5,16 @@ var ditasearch = {
                         // Functional CSS 
                         var css = document.createTextNode('\
 .ditasearch { overflow: visible; height: 1.5em; } \
-.ditasearch > * { width: 100%; margin: 0; padding: 2px; border: 1px solid #bfbfbf; font: inherit; } \
-.ditasearch > input {  } \
-.ditasearch > nav { max-height: 15em; overflow-y: auto; background: #e7f2d2; opacity: .99; padding: 0 2px; border-top: 0px none;} \
-.ditasearch > nav > ol { margin: 10px 0 0 0; } .ditasearch > nav > ol > li {margin: 0 !important; padding: .25em !important;} \
-.ditasearch > nav > ol > li > a:focus {outline:0} .ditasearch > nav > ol > li.dsselected { background-color: #cae29d; } \
-.ditasearch > nav > ol p { margin: 0 0 10px 0; font-size: 90%; } \
-.ditasearch > nav.dspending * { color: #bfbfbf; } \
-.ditasearch > nav.dshidden { display: none } \
+.ditasearch input { width: 100%; margin: 0; padding: 2px; border: 1px solid #bfbfbf; font: inherit; } \
+.ditasearch nav { width: 100%; margin: 0; padding: 2px; border: 1px solid #bfbfbf; font: inherit; } \
+.ditasearch nav { max-height: 15em; overflow-y: auto; background: #e7f2d2; opacity: .99; padding: 0 2px; border-top: 0px none;} \
+.ditasearch nav.dspending * { color: #bfbfbf; } \
+.ditasearch nav.dshidden { display: none } \
+.ditasearch nav ol { margin: 10px 0 0 0; } \
+.ditasearch nav ol li {margin: 0; padding: .25em;} \
+.ditasearch nav ol li.dsselected { background-color: #cae29d; } \
+.ditasearch nav ol li a:focus {outline:0} \
+.ditasearch nav ol p { margin: 0 0 10px 0; font-size: 90%; } \
                         ');
                         var style = document.createElement("STYLE");
                         style.setAttribute("type","text/css");
