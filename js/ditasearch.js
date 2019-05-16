@@ -24,7 +24,7 @@ var ditasearch = {
                         // HTML
                         ditasearch.div.innerHTML = '<input type="text" placeholder="' + ditasearch.strings.input_placeholder 
                             + '" aria-label="' + ditasearch.strings.input_aria_label 
-                            + '"><nav class="dshidden" aria-live="polite" aria-label="' + ditasearch.strings.results_aria_label 
+                            + '"><nav tabindex="-1" class="dshidden" aria-live="polite" aria-label="' + ditasearch.strings.results_aria_label 
                             + '"></nav>';
                         ditasearch.div.setAttribute("role","search");
                         ditasearch.div.setAttribute("aria-label",ditasearch.strings.searchdiv_aria_label);
