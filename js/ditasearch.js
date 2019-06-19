@@ -51,10 +51,14 @@ var ditasearch = {
                         ditasearch.div.addEventListener("click", function(event) { event.stopPropagation(); });
                         document.getElementsByTagName("BODY")[0].addEventListener("click", ditasearch.cancel);
                         ditasearch.div.results.addEventListener("focus", function ( event ) {
-                            event.target.parentNode.className = "dsselected";
+                            if ( event.target.parentNode.nodeName == "LI" ) {
+                                event.target.parentNode.className = "dsselected";
+                            }
                         }, true);
                         ditasearch.div.results.addEventListener("blur", function ( event ) {
-                            event.target.parentNode.className = "";
+                            if ( event.target.parentNode.className == 'dsselected' ) {
+                                event.target.parentNode.className = "";
+                            }
                         }, true);
                         ditasearch.div.results.addEventListener("click", function ( event ) {
                             if ( event.target.nodeName == 'A' ) { 
@@ -229,18 +233,20 @@ var ditasearch = {
                     var queryparam = '?query=' + encodeURIComponent(ditasearch.query.value);
                     var resultsHTML = "<ol>";
                     for (var i = 0; i < results.length; i++) {
-                        var scoreattr = stemsattr = '';
+                        var scoreattr = '', stemsattr = '', shortdesc= '';
                         if (typeof results[i].score == "number")  { scoreattr = ' data-score="' + results[i].score + '"'; }
                         if (typeof results[i].terms == "string")  { stemsattr = ' data-stems="' + results[i].terms + '"'; }
-                        var alink = (typeof results[i].href == "string" && results[i].href.length > 0) 
-                            ? alinkbase + results[i].href + queryparam + '">' + results[i].title + '</a>'
-                            : '<p>' + results[i].title + '</p>';
-                        var shortdesc = (typeof results[i].shortdesc == "string" && results[i].shortdesc.length > 0)
-                                    ? '<p class="shortdesc">' + results[i].shortdesc + '</p>'
-                                    : '';
-                        
-                        resultsHTML += '<li' + scoreattr + stemsattr + '>'
-                                        + alink + shortdesc + '</li>';
+                        if (typeof results[i].href == "string" && results[i].href.length > 0) {
+                            if (typeof results[i].shortdesc == "string" && results[i].shortdesc.length > 0) {
+                                shortdesc = '<p class="shortdesc">' + results[i].shortdesc + '</p>';
+                            }
+                            resultsHTML += '<li' + scoreattr + stemsattr + '>'
+                                        + alinkbase + results[i].href + queryparam + '">' 
+                                        + results[i].title + shortdesc + '</a></li>';
+                        } else {
+                            resultsHTML += '<li' + scoreattr + stemsattr + '>'
+                                        + '<p>' + results[i].title + '</p></li>';
+                        }
                     }
                     resultsHTML += "</ol>";
                     ditasearch.div.results.innerHTML = resultsHTML;
