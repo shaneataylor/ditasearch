@@ -87,7 +87,8 @@
             out="${output.dir}/ditasearch.js"
             style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/index2js.xsl"
             failOnError="true">
-            <param name="scriptfile" expression="${dita.plugin.com.taylortext.ditasearch.dir}/js/ditasearch.js"/>
+            <!-- Relative to directory of stylesheet -->
+            <param name="scriptfile" expression="../js/ditasearch.js"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
     </target>
