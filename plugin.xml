@@ -2,7 +2,7 @@
 <plugin id="com.taylortext.ditasearch">
     <feature extension="package.support.name" value="Shane Taylor"/>
     <feature extension="package.support.email" value="shane@taylortext.com"/>
-    <feature extension="package.version" value="1.6"/>
+    <feature extension="package.version" value="1.7"/>
 
     <require plugin="org.dita.html5"/>
     

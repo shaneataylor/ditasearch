@@ -230,7 +230,6 @@ var ditasearch = {
                               "terms"     : string,
                               "score"     : number  */
                     var alinkbase = '<a href="' + ditasearch.div.getAttribute("data-searchroot");
-                    var queryparam = '?query=' + encodeURIComponent(ditasearch.query.value);
                     var resultsHTML = "<ol>";
                     for (var i = 0; i < results.length; i++) {
                         var scoreattr = '', stemsattr = '', shortdesc= '';
@@ -241,7 +240,7 @@ var ditasearch = {
                                 shortdesc = '<p class="shortdesc">' + results[i].shortdesc + '</p>';
                             }
                             resultsHTML += '<li' + scoreattr + stemsattr + '>'
-                                        + alinkbase + results[i].href + queryparam + '">' 
+                                        + alinkbase + results[i].href + '">' 
                                         + results[i].title + shortdesc + '</a></li>';
                         } else {
                             resultsHTML += '<li' + scoreattr + stemsattr + '>'
