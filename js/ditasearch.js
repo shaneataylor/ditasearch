@@ -36,6 +36,7 @@ var ditasearch = {
                         var saved = ditasearch.load();
                         if (saved != null) {
                             ditasearch.div.input.value = saved.query;
+                            ditasearch.results.count = saved.count;
                             ditasearch.results.toHTML(saved.results);
                             ditasearch.results.hide();
                         }
@@ -180,12 +181,14 @@ var ditasearch = {
                           sessionStorage.removeItem("ditasearch");
 
                       } else if ( results.length == 0 ) {
+                          ditasearch.results.count = 0;
                           results.push({ "title" : ditasearch.strings.results_no_results });
-                          ditasearch.save({"query":ditasearch.query.value, "results":results});
+                          ditasearch.save({"query":ditasearch.query.value, "results":results, "count":ditasearch.results.count});
                           ditasearch.results.toHTML(results);
                       } else {
+                          ditasearch.results.count = results.length;
                           results.sort(function(a,b) {return b.score - a.score});
-                          ditasearch.save({"query":ditasearch.query.value, "results":results});
+                          ditasearch.save({"query":ditasearch.query.value, "results":results, "count":ditasearch.results.count});
                           ditasearch.results.toHTML(results);
                       }
     },
@@ -218,7 +221,9 @@ var ditasearch = {
                         }
                         return synonyms;
     },
+    attHTML         : function(attname, value) { return " " + attname + '="' + value + '"' },
     results         : {
+        count       : 0,
         "pending"   : function() {
                     ditasearch.div.results.className = "dspending";
         },
@@ -229,23 +234,19 @@ var ditasearch = {
                               "shortdesc" : string,
                               "terms"     : string,
                               "score"     : number  */
-                    var alinkbase = '<a href="' + ditasearch.div.getAttribute("data-searchroot");
+                    var linkbase = ditasearch.div.getAttribute("data-searchroot");
                     var resultsHTML = "<ol>";
                     for (var i = 0; i < results.length; i++) {
-                        var scoreattr = '', stemsattr = '', shortdesc= '';
-                        if (typeof results[i].score == "number")  { scoreattr = ' data-score="' + results[i].score + '"'; }
-                        if (typeof results[i].terms == "string")  { stemsattr = ' data-stems="' + results[i].terms + '"'; }
-                        if (typeof results[i].href == "string" && results[i].href.length > 0) {
-                            if (typeof results[i].shortdesc == "string" && results[i].shortdesc.length > 0) {
-                                shortdesc = '<p class="shortdesc">' + results[i].shortdesc + '</p>';
-                            }
-                            resultsHTML += '<li' + scoreattr + stemsattr + '>'
-                                        + alinkbase + results[i].href + '">' 
-                                        + results[i].title + shortdesc + '</a></li>';
-                        } else {
-                            resultsHTML += '<li' + scoreattr + stemsattr + '>'
-                                        + '<p>' + results[i].title + '</p></li>';
-                        }
+                        var scoreattr = (typeof results[i].score == "number") ? ditasearch.attHTML("data-score",results[i].score) : '';
+                        var stemsattr = (typeof results[i].terms == "string") ? ditasearch.attHTML("data-stems",results[i].terms) : '';
+                        var dataattrs = scoreattr + stemsattr + ditasearch.attHTML("data-rank", i + 1);
+                        var shortdesc = (typeof results[i].shortdesc == "string" && results[i].shortdesc.length > 0)
+                                        ? '<p class="shortdesc">' + results[i].shortdesc + '</p>' 
+                                        : '';
+                        resultsHTML += (typeof results[i].href == "string" && results[i].href.length > 0)
+                                        ? '<li><a' + dataattrs + ditasearch.attHTML("href", linkbase + results[i].href) + '>' 
+                                            + results[i].title + shortdesc + '</a></li>'
+                                        : '<li><p' + dataattrs + '>' + results[i].title + '</p></li>';
                     }
                     resultsHTML += "</ol>";
                     ditasearch.div.results.innerHTML = resultsHTML;
@@ -260,6 +261,7 @@ var ditasearch = {
         },
         "clear"     : function() {
                     ditasearch.div.results.innerHTML = "";
+                    ditasearch.results.count = 0;
         }
     },
     "remove"        : function() {
