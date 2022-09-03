@@ -84,7 +84,7 @@
         <xsl:variable name="format2" as="xs:string">"KEY":"VALUE"</xsl:variable>
         <xsl:for-each select="//topicSummary">
             <xsl:sort select="@href"/>
-            <xsl:if test="not(position() = 1)">,</xsl:if>
+            <xsl:if test="not(position() = 1)">,&#x0D;&#x0A;  </xsl:if>
             <xsl:value-of select="fn:JSONobj(@href,
                 concat('{',fn:JSONobj('searchtitle',fn:JSONify(@searchtitle),$format2),',',
                 fn:JSONobj('shortdesc',fn:JSONify(@shortdesc),$format2),'}'),$format1)"/>
@@ -95,11 +95,11 @@
         <xsl:variable name="format" as="xs:string">"KEY":[VALUE]</xsl:variable>
         <xsl:for-each-group select="//stem" group-by="@value">
             <xsl:sort select="@value"/>
-            <xsl:if test="not(position() = 1)">,</xsl:if>
+            <xsl:if test="not(position() = 1)">,&#x0D;&#x0A;  </xsl:if>
             <xsl:variable name="topics">
                 <xsl:for-each select="current-group()">
                     <xsl:sort select="@score" order="descending" data-type="number"/>
-                    <xsl:if test="not(position() = 1)">,</xsl:if>
+                    <xsl:if test="not(position() = 1)">,&#x0D;&#x0A;    </xsl:if>
                     <xsl:value-of select="fn:JSONobj(@href,@score)"/>
                 </xsl:for-each>
             </xsl:variable>
