@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="build_ditasearch_targets" basedir="."
-    xmlns:dita="http://dita-ot.sourceforge.net">
+    xmlns:dita="http://dita-ot.sourceforge.net" xmlns:if="ant:if" xmlns:unless="ant:unless">
     
     <target name="ditasearch"
         dita:depends="
@@ -31,18 +31,22 @@
     </target>
     
     <target name="ditasearch-genlist">
-        <xslt basedir="${dita.temp.dir}"
-            includesfile="${dita.temp.dir}/fullditamap.list" 
-            destdir="${dita.temp.dir}"
-            style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/gen-nosearch-list.xsl"
-            failOnError="true" extension=".nosearch">
-            <xmlcatalog refid="dita.catalog"/>
-        </xslt>
+        <pipeline message="Create list of DITA topics not to search" taskname="gen-nosearch-list">
+            <xslt basedir="${dita.temp.dir}"
+                destdir="${dita.temp.dir}"
+                style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/gen-nosearch-list.xsl"
+                extension=".nosearch">
+                <ditafileset format="ditamap" input="true"/><!-- WAS fullditamap.list -->
+                <xmlcatalog refid="dita.catalog"/>
+            </xslt>
+        </pipeline>
+        <xslt in="${dita.temp.dir}${file.separator}.job.xml"
+            out="${dita.temp.dir}${file.separator}searchtopics.list"
+            style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/gen-search-list.xsl"/>
         <concat destfile="${dita.temp.dir}/nosearch.list" fixlastline="yes">
             <path>
                 <fileset dir="${dita.temp.dir}">
-                    <include name="*.nosearch"/>
-                    <include name="resourceonly.list"/>
+                    <include name="**/*.nosearch"/>
                 </fileset>
             </path>
             <filterchain><!-- sort list entries and remove duplicates -->
@@ -55,19 +59,19 @@
         <loadfile property="nosearchlist" srcfile="${dita.temp.dir}/nosearch.list"/>
     </target>
     
-    <target name="ditasearch-searchindex" if="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
-        <antcall target="ditasearch-genlist"/>
-        <antcall target="ditasearch-configfile"/>
+    <target name="ditasearch-searchindex" if:set="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
+        <antcall target="ditasearch-genlist" inheritrefs="true"/>
+        <antcall target="ditasearch-configfile" inheritrefs="true"/>
         <!-- Index each topic individually first -->
         <xslt basedir="${dita.temp.dir}"
-            includesfile="${dita.temp.dir}/fullditatopic.list"
+            includesfile="${dita.temp.dir}/searchtopics.list"
             excludesfile="${dita.temp.dir}/nosearch.list"
             destdir="${dita.temp.dir}"
             style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/stemmer.xsl"
             filenameparameter="thisindextarget"
             filedirparameter="thisindexpath"
-            failOnError="false" extension=".idx">
-            <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+            failonerror="false" extension=".idx">
+            <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
             <param name="configfile" expression="${dita.temp.dir}/searchconfigs.xml"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>

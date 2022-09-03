@@ -10,22 +10,13 @@
     <xsl:output encoding="UTF-8" method="text"/>
     
     <xsl:template match="/">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="job/files/file[@format='dita'][not(@resource-only='true')]"/>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,'- map/map ') or contains(@class, '- map/topicref')]">
-        <xsl:param name="unsearchable" select="@search='no'" tunnel="yes"/>
-        <xsl:if test="$unsearchable">
-            <xsl:value-of select="concat(@href,'&#x0D;&#x0A;')"/>
-            <xsl:if test="@copy-to">
-                <xsl:value-of select="concat(@copy-to,'&#x0D;&#x0A;')"/>
-            </xsl:if>
-        </xsl:if>
-        <xsl:apply-templates/>
+    <xsl:template match="file">
+        <xsl:value-of select="concat(@path,'&#x0D;&#x0A;')"/><!-- @copy-to files are already included -->
     </xsl:template>
     
-    <xsl:template match="text()">
-        <!-- don't do anything -->
-    </xsl:template>
+    <xsl:template match="*|text()|@*"/>
     
 </xsl:stylesheet>
