@@ -179,12 +179,12 @@
     
     <xsl:function name="porter2:endsWithShortSyllable" as="xs:boolean">
         <xsl:param name="thisword" as="xs:string"/>
-        <xsl:value-of select="(matches($thisword,'[^aeiouy][aeiouy][^aeiouywxY]$') or matches($thisword,'^[aeiouy][^aeiouy]$'))"/>
+        <xsl:sequence select="(matches($thisword,'[^aeiouy][aeiouy][^aeiouywxY]$') or matches($thisword,'^[aeiouy][^aeiouy]$'))"/>
     </xsl:function>
     
     <xsl:function name="porter2:isShort" as="xs:boolean">
         <xsl:param name="thisword" as="xs:string"/>
-        <xsl:value-of 
+        <xsl:sequence 
             select="string-length(porter2:R1($thisword))=0 and porter2:endsWithShortSyllable($thisword)"/>
     </xsl:function>
     
