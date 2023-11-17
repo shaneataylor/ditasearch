@@ -16,22 +16,51 @@
     <xsl:param name="thisindexpath"/>
     <xsl:param name="OUTEXT" select="'.html'" />
     <xsl:param name="configfile" /><!-- generated search configs -->
+    <xsl:param name="argsinputdir"/>
     <xsl:param name="thishref">
-        <xsl:variable name="relpath">
-            <xsl:choose>
-                <xsl:when test="$thisindexpath='.'">
-                    <xsl:value-of select="$thisindextarget"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="concat(replace($thisindexpath,'/$',''),'/',$thisindextarget)"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
         <xsl:call-template name="replace-extension">
-            <xsl:with-param name="filename" select="$relpath"/>
+            <xsl:with-param name="filename"
+                select="concat(fn:find-relative-path($argsinputdir,$thisindexpath),$thisindextarget)"/>
             <xsl:with-param name="extension" select="$OUTEXT"/>
         </xsl:call-template>
     </xsl:param>
+    
+    <xsl:function name="fn:find-relative-path" as="xs:string">
+        <xsl:param name="basepath" as="xs:string"/>
+        <xsl:param name="path" as="xs:string"/>
+        <xsl:variable name="b" select="replace($basepath,'^/|/$','')"/>
+        <xsl:variable name="p" select="replace($path,'^/|/$','')"/>
+        <xsl:variable name="bend" select="fn:substring-after-last($b,'/')"/>
+        <xsl:variable name="pstart" select="concat(fn:substring-before-last($p,$bend),$bend)"/>
+        <xsl:variable name="pstart2" select="concat(fn:substring-before-last(fn:substring-before-last($p,$bend),$bend),$bend)"/>
+        <xsl:choose>
+            <xsl:when test="$p=('.','') or ends-with($b,$p)">
+                <xsl:value-of select="''"/>
+            </xsl:when>
+            <xsl:when test="not($pstart='') and ends-with($b,$pstart)">
+                <xsl:value-of select="concat(replace($p,concat($pstart,'/'),'','q'),'/')"/>
+            </xsl:when>
+            <xsl:when test="not($pstart2='') and ends-with($b,$pstart2)">
+                <xsl:value-of select="concat(replace($p,concat($pstart2,'/'),'','q'),'/')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat($p,'/')"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="fn:substring-after-last" as="xs:string">
+        <xsl:param name="arg1" as="xs:string"/>
+        <xsl:param name="arg2" as="xs:string"/>
+        <xsl:value-of select="tokenize($arg1,$arg2,'q')[last()]"/>
+    </xsl:function>
+    
+    <xsl:function name="fn:substring-before-last" as="xs:string">
+        <xsl:param name="arg1" as="xs:string"/>
+        <xsl:param name="arg2" as="xs:string"/>
+        <xsl:value-of select="string-join(reverse(subsequence(reverse(tokenize($arg1,$arg2,'q')),2)),$arg2)"/>
+    </xsl:function>
+    
     <xsl:param name="thisdir">
         <xsl:value-of select="concat(/processing-instruction('workdir-uri')[1],/processing-instruction('path2project-uri')[1])"/>
     </xsl:param>

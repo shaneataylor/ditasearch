@@ -2,7 +2,7 @@
 <plugin id="com.taylortext.ditasearch">
     <feature extension="package.support.name" value="Shane Taylor"/>
     <feature extension="package.support.email" value="shane@taylortext.com"/>
-    <feature extension="package.version" value="1.7.3"/>
+    <feature extension="package.version" value="1.7.4"/>
 
     <require plugin="org.dita.html5"/>
     
@@ -30,4 +30,3 @@
     <feature extension="dita.conductor.html5.toc.param" file="params.xml"/>
     <feature extension="dita.xsl.html5" file="xsl/header-footer.xsl"/>
 </plugin>
-    

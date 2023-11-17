@@ -73,6 +73,7 @@
             failonerror="false" extension=".idx">
             <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
             <param name="configfile" expression="${dita.temp.dir}/searchconfigs.xml"/>
+            <param name="argsinputdir" expression="${args.input.dir}"/>
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
         <!-- Combine topic indexes and search configs into a single file for further processing -->
