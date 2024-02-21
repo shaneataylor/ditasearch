@@ -40,24 +40,30 @@
                 <xmlcatalog refid="dita.catalog"/>
             </xslt>
         </pipeline>
-        <xslt in="${dita.temp.dir}${file.separator}.job.xml"
-            out="${dita.temp.dir}${file.separator}searchtopics.list"
-            style="${dita.plugin.com.taylortext.ditasearch.dir}/xsl/gen-search-list.xsl"/>
+        <pathconvert property="search.list" pathsep="${line.separator}">
+            <ditafileset format="dita" processingRole="normal"/>
+        </pathconvert>
+        <concat destfile="${dita.temp.dir}/searchtopics.list" fixlastline="yes">
+            <propertyresource name="search.list"/>
+            <filterchain refid="searchlist-filterchain"/>
+        </concat>
         <concat destfile="${dita.temp.dir}/nosearch.list" fixlastline="yes">
             <path>
                 <fileset dir="${dita.temp.dir}">
                     <include name="**/*.nosearch"/>
                 </fileset>
             </path>
-            <filterchain><!-- sort list entries and remove duplicates -->
-                <sortfilter/>
-                <tokenfilter>
-                    <uniqfilter/>
-                </tokenfilter>
-            </filterchain>
+            <filterchain refid="searchlist-filterchain"/>
         </concat>
-        <loadfile property="nosearchlist" srcfile="${dita.temp.dir}/nosearch.list"/>
     </target>
+    
+    <filterchain id="searchlist-filterchain"><!-- sort list entries and remove duplicates -->
+        <sortfilter/>
+        <tokenfilter>
+            <uniqfilter/>
+        </tokenfilter>
+        <replacestring from="file:${dita.temp.dir}/" to=""/><!-- ENTRIES MUST BE RELATIVE TO ${dita.temp.dir} -->
+    </filterchain>
     
     <target name="ditasearch-searchindex" if:set="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
         <antcall target="ditasearch-genlist" inheritrefs="true"/>
