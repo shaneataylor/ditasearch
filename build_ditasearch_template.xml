@@ -57,6 +57,15 @@
             </filterchain>
         </concat>
         <loadfile property="nosearchlist" srcfile="${dita.temp.dir}/nosearch.list"/>
+        
+        <!-- temp for info -->
+        <concat><!-- to log -->
+            <string>SEARCH LIST:</string>
+            <file file="${dita.temp.dir}/searchtopics.list"/>
+            <string>NOSEARCH LIST:</string>
+            <file file="${dita.temp.dir}/nosearch.list"/>
+        </concat>
+        
     </target>
     
     <target name="ditasearch-searchindex" if:set="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
