@@ -82,7 +82,7 @@
             <xmlcatalog refid="dita.catalog"/>
         </xslt>
         <!-- Combine topic indexes and search configs into a single file for further processing -->
-        <concat destfile="${dita.temp.dir}/ditasearch.xml">
+        <concat destfile="${dita.temp.dir}/ditasearch.xml" encoding="UTF-8">
             <fileset dir="${dita.temp.dir}">
                 <include name="**/*.idx"/>
                 <include name="searchconfigs.xml"/>
