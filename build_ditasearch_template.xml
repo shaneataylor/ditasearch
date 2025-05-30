@@ -16,21 +16,13 @@
     </target>
     
     <target name="ditasearch-init">
-        <condition property="ditasearch-gen-index">
-            <!-- proxy test for an HTML-type transformation -->
-            <or>
-                <equals arg1="${transtype}" arg2="html5"/>
-                <isset property="args.css"/>
-                <isset property="args.ftr"/>
-                <isset property="args.hdf"/>
-                <isset property="args.hdr"/>
-                <isset property="args.html5.toc"/>
-                <isset property="args.outext"/>
-            </or>
-        </condition>
+      <condition property="ditasearch-gen-index" value="true">
+        <!-- Set this property manually to use DITASearch for other transformation types -->
+        <equals arg1="${transtype}" arg2="html5"/>
+      </condition>
     </target>
     
-    <target name="ditasearch-genlist">
+    <target name="ditasearch-genlist" if="ditasearch-gen-index">
         <pipeline message="Create list of DITA topics not to search" taskname="gen-nosearch-list">
             <xslt basedir="${dita.temp.dir}"
                 destdir="${dita.temp.dir}"
@@ -65,7 +57,7 @@
         <replacestring from="file:${dita.temp.dir}/" to=""/><!-- ENTRIES MUST BE RELATIVE TO ${dita.temp.dir} -->
     </filterchain>
     
-    <target name="ditasearch-searchindex" if:set="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
+    <target name="ditasearch-searchindex" if="${ditasearch-gen-index}" description="Generate a JSON index of the help content." >
         <antcall target="ditasearch-genlist" inheritrefs="true"/>
         <antcall target="ditasearch-configfile" inheritrefs="true"/>
         <!-- Index each topic individually first -->
@@ -103,7 +95,7 @@
         </xslt>
     </target>
     
-    <target name="ditasearch-configfile" description="Combine user and default search configs.">
+    <target name="ditasearch-configfile" if="ditasearch-gen-index" description="Combine user and default search configs.">
         <condition property="configfile.found" value="true" else="false">
             <available file="${args.ditasearch.configs}"/>
         </condition>

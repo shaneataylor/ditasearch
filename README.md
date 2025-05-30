@@ -27,7 +27,9 @@ adds processing to the HTML5 transformation type. This is intended to make it
 easier to implement with either default HTML5 transformations or custom plugins
 based on HTML5.
 
-**NOTE** This plugin does *not* support XHTML-based transformations.
+* To perform DITASearch indexing for a custom, plugin, set `ditasearch-gen-index` to `true`
+  so that DITASearch templates are processed.
+* This plugin does *not* support XHTML-based transformations.
 
 When you build your topics, you will see three changes in your output files:
 
@@ -56,11 +58,47 @@ or custom header and footer. The following values are supported:
 
 ## Release history
 
-### 1.1 - Bugfix release
+1.7.6
+: Fix: DITASearch parsing was performed even when not building HTML5
 
-- Fixed: The search index was built even for non-HTML builds.
-- Fixed: Search results did not scroll to the top after the query changed.
+1.7.5
+: TC-5477 Fix: UTF-8 encoding is not default for new Jenkins agent
 
-### R1 - Initial release
+1.7.4
+: TC-4758 Refactor to use ditafileset pipeline
 
+1.7.3
+: Fix log warning
 
+1.7.2
+: Don't rely on deprecated .list files
+
+1.7.1
+: Improve readability of index files
+
+1.7
+: TC-3559 Add result ranking to HTML
+: TC-3559 Remove query param from result URL
+
+1.6
+: Fix Windows build problem
+
+1.5
+: Make shortdesc clickable, fix bug when clicking shortdesc
+: Fix: In Firefox, ditasearch class was removed on keyboard navigation
+
+1.4
+: Make CSS selectors less specific (easier to override)
+
+1.3
+: Pass search query to analytics, new topic
+
+1.2
+: Support DITA-OT 3.1
+
+1.1
+: Test for an HTML-type transformation before generating index
+: Scroll to top of results after rebuilding result list
+
+R1
+: Initial release
